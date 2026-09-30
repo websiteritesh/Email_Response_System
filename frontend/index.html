@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reply Desk — Email Response System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="band">
+    <div class="band-inner">
+        <div class="brand">
+            <h1 class="serif">Reply Desk</h1>
+            <p>AI triage for customer email — a human approves every reply.</p>
+        </div>
+        <div class="stats">
+            <div class="stat"><div class="num" id="totalCount">0</div><div class="lbl">Total emails</div></div>
+            <div class="stat pending"><div class="num" id="pendingCount">0</div><div class="lbl">Awaiting review</div></div>
+            <div class="stat approved"><div class="num" id="approvedCount">0</div><div class="lbl">Approved</div></div>
+        </div>
+    </div>
+</header>
+
+<main class="layout">
+
+    <section class="compose">
+        <h2 class="serif">New email</h2>
+        <p class="hint">Paste a customer message. The AI will classify it and draft a reply.</p>
+        <div class="field">
+            <label for="senderInput">Sender</label>
+            <input type="text" id="senderInput" value="customer@example.com">
+        </div>
+        <div class="field">
+            <label for="emailInput">Message</label>
+            <textarea id="emailInput" placeholder="Paste the customer email here…"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="processEmail()" id="processBtn">Process email</button>
+        <div class="processing" id="processingMsg">Reading and classifying the email…</div>
+    </section>
+
+    <section>
+        <div class="toolbar">
+            <div class="tabs" id="tabs">
+                <button class="tab active" data-filter="All">All</button>
+                <button class="tab" data-filter="Pending">Pending</button>
+                <button class="tab" data-filter="Approved">Approved</button>
+                <button class="tab" data-filter="Rejected">Rejected</button>
+            </div>
+            <button class="btn-ghost" onclick="clearAll()">Clear all</button>
+        </div>
+        <div id="emailList"></div>
+    </section>
+
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

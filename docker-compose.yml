@@ -1,0 +1,10 @@
+services:
+  api:
+    build: .
+    # network_mode "host" instead of a port mapping: in Codespaces, Docker's
+    # own isolated network sometimes can't resolve external hostnames like
+    # Supabase's. Sharing the host's network directly avoids that entirely —
+    # we found this the hard way while working on Project 1.
+    network_mode: "host"
+    env_file:
+      - .env
