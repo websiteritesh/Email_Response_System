@@ -1,0 +1,48 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Check every secret is present BEFORE doing anything else, and fail
+      # loudly and immediately if one is missing — no hunting through logs.
+      - name: Check all secrets are set
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          missing=0
+          for var in GEMINI_API_KEY DATABASE_URL; do
+            value="${!var}"
+            if [ -z "$value" ]; then
+              echo "MISSING: $var is empty or not set"
+              missing=1
+            else
+              echo "OK: $var is set (${#value} characters)"
+            fi
+          done
+          if [ "$missing" = "1" ]; then
+            echo ""
+            echo "Add missing secrets in: Settings -> Secrets and variables -> Actions"
+            exit 1
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: pytest -v
